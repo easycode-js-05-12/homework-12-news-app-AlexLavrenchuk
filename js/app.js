@@ -8,31 +8,41 @@ const countrySelect = form['country'];
 const categorySelect = form['category'];
 const inputSearch = document.getElementById('search');
 
-function onSelectChange(e) {
+/**
+ * select change request
+ */
+function onSelectChange() {
     const country = countrySelect.value;
     const category = categorySelect.value;
     
     if (!country || !category) return console.log('Выберите страну и категорию');
 
-    newsService.getTopHeadlinesNews((response) => {
-        const { articles } = response;
-        newsUI.clearContainer();
-        articles.forEach((news) => newsUI.addNews(news));
-    }, category, country);
+    newsService.getTopHeadlinesNews(category, country)
+        .then( ({ articles }) => {
+            notificationUI.clearAlert();
+            newsUI.clearContainer();
+            articles.forEach((news) => newsUI.addNews(news));
+        })
+        .catch((err) => {
+            newsUI.clearContainer();
+            notificationUI.addNotification(err);
+        });
 }
-
-function searchLength(event) {
+/**
+ * search change request
+ */
+function searchLength() {
     if (3 <= inputSearch.value.length) {
-        newsService.getEverythingNews((response) => {
-            if (response.status === "error") {
+        newsService.getEverythingNews(inputSearch.value)
+            .then( ({ articles }) => {
                 notificationUI.clearAlert();
-                notificationUI.addNotification(response);   
-            } else {
-                const { articles } = response;
                 newsUI.clearContainer();
                 articles.forEach((news) => newsUI.addNews(news));
-            }
-        }, inputSearch.value);
+            })
+            .catch((err) => {
+                newsUI.clearContainer();
+                notificationUI.addNotification(err);
+            });
     }
 }
 
@@ -40,3 +50,4 @@ function searchLength(event) {
 countrySelect.addEventListener('change', onSelectChange);
 categorySelect.addEventListener('change', onSelectChange);
 inputSearch.addEventListener('keyup', searchLength);
+

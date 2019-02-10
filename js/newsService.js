@@ -9,16 +9,24 @@ class NewsService {
     }
 
     /**
-     * Get all news
+     * Get all news upon request from select
      */
-    getTopHeadlinesNews(callback, category = this.category, country = this.country) {
-        http.get(`${this.apiUrl}/top-headlines?country=${country}&category=${category}&apiKey=${this.apiKey}`, callback);
+    getTopHeadlinesNews(category = this.category, country = this.country) {
+        return new Promise ((resolve, reject) => {
+            http.get(`${this.apiUrl}/top-headlines?country=${country}&category=${category}&apiKey=${this.apiKey}`)
+                .then((data) => resolve(data))
+                .catch((err) => reject(err));
+        });
     }
 
     /**
-     * Get search news
+     * Get all news upon request from search
      */
-    getEverythingNews(callback, bitcoint) {
-        http.get(`${this.apiUrl}/everything?q=${bitcoint}&apiKey=${this.apiKey}`, callback);
+    getEverythingNews(bitcoint) {
+        return new Promise ((resolve, reject) => {
+            http.get(`${this.apiUrl}/everything?q=${bitcoint}&apiKey=${this.apiKey}`)
+                .then((data) => resolve(data))
+                .catch((err) => reject(err));
+        });
     }
 }

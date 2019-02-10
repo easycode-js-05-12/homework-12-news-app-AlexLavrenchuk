@@ -2,12 +2,11 @@ class NewsUI {
     constructor() {
         this.newsContainer = document.querySelector('.news-wrap .row');
     }
-
+    //adding method
     addNews(news) {
-        // const template = NewsUI.newsTemplate(news);
         this.newsContainer.insertAdjacentElement("afterbegin", NewsUI.newsTemplate(news));
     }
-
+    //cleaning method
     clearContainer() {
         let first = this.newsContainer.firstElementChild;
         while (first) {
@@ -15,7 +14,7 @@ class NewsUI {
             first = this.newsContainer.firstElementChild;
         }
     }
-
+    //creature markup method
     static newsTemplate(news) {
         const divCol = createDomElement("div", "col s12 m6");
         const divCard = createDomElement("div", "card");
